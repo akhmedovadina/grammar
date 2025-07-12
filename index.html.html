@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Past Simple vs Past Continuous Quest</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
+
+    body {
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff9eb3, #ffb5e1);
+      font-family: 'Fredoka One', cursive;
+      overflow-x: hidden;
+    }
+
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #fff0f6;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+      text-align: center;
+      position: relative;
+    }
+
+    h1 {
+      font-size: 48px;
+      color: #ff4081;
+      margin-bottom: 10px;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px #fff;
+    }
+
+    #score, #timer {
+      font-size: 24px;
+      margin: 10px;
+      display: inline-block;
+      background: #fff;
+      padding: 5px 15px;
+      border-radius: 12px;
+      color: #ff4081;
+      box-shadow: 2px 2px #ff7eb3;
+    }
+
+    .question-box {
+      background: #fff;
+      padding: 30px;
+      border-radius: 20px;
+      margin: 30px 0;
+      font-size: 24px;
+      color: #ff4081;
+      position: relative;
+      min-height: 100px;
+    }
+
+    .options button, .words span, #submitBtn {
+      background: #ff4081;
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 20px;
+      border-radius: 15px;
+      margin: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options button:hover,
+    .words span:hover,
+    #submitBtn:hover {
+      background: #ff7eb3;
+      transform: scale(1.1);
+    }
+
+    .words span {
+      display: inline-block;
+      background: #ffd1e8;
+      color: #ff4081;
+      margin: 5px;
+      padding: 8px 12px;
+      border-radius: 10px;
+      cursor: pointer;
+    }
+
+    #builtSentence {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #d81b60;
+      min-height: 30px;
+    }
+
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
+    }
+
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-6px); }
+      100% { transform: translateX(0); }
+    }
+
+    .feedback-success {
+      color: #4caf50;
+      animation: pulse 0.8s ease;
+      font-size: 40px;
+    }
+
+    .feedback-error {
+      color: #f44336;
+      animation: shake 0.8s ease;
+      font-size: 40px;
+    }
+
+    #finalScreen {
+      display: none;
+      font-size: 28px;
+      color: #d81b60;
+    }
+  </style>
+</head>
+<body>
+  <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2023/03/15/audio_d1f95b8d6a.mp3" loop></audio>
+
+  <div class="container">
+    <h1>Pink Quest</h1>
+    <div id="score">Score: 0</div>
+    <div id="timer">Time: 60</div>
+
+    <div class="question-box">
+      <div id="question"></div>
+      <div id="options" class="options"></div>
+      <div id="words" class="words"></div>
+      <div id="builtSentence"></div>
+      <button id="submitBtn" style="display:none;">Submit</button>
+      <button id="undoBtn" style="display:none;">Undo</button>
+      <div id="feedback"></div>
+    </div>
+
+    <div id="finalScreen"></div>
+  </div>
+
+  <script>
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.3;
+    document.body.addEventListener("click", () => {
+      bgMusic.play().catch(()=>{});
+    }, {once:true});
+
+    const scoreEl = document.getElementById('score');
+    const timerEl = document.getElementById('timer');
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const wordsEl = document.getElementById('words');
+    const builtSentenceEl = document.getElementById('builtSentence');
+    const submitBtn = document.getElementById('submitBtn');
+    const feedback = document.getElementById('feedback');
+    const finalScreen = document.getElementById('finalScreen');
+
+    let score = 0;
+    let timeLeft = 300;
+    let timer;
+    let currentQ = 0;
+    let built = "";
+
+    const questions = [
+      // Level 1 - Multiple Choice
+      { type: "mc", question: "I _______ my friend when I saw a strange light.", options: ["talked", "was talking"], answer: "was talking" },
+      { type: "mc", question: "She ______ her homework last night.", options: ["did", "was doing"], answer: "did" },
+
+      // Level 2 - Sentence Builder
+      { type: "builder", question: "Build: He / play / football / when / it / start / rain", words: ["He", "was playing", "football", "when", "it", "started", "to rain"], answer: "He was playing football when it started to rain" },
+      { type: "builder", question: "Build: They / watch / movie / when / phone / ring", words: ["They", "were watching", "a movie", "when", "the phone", "rang"], answer: "They were watching a movie when the phone rang" },
+
+      // Level 3 - Mistake Finder
+      { type: "mistake", sentence: "I was saw a cat in the garden.", wrong: "was", correct: "saw" },
+      { type: "mistake", sentence: "She was go to school yesterday.", wrong: "was", correct: "went" },
+
+      // Level 4 - Drag Order (Sentence Ordering)
+      { type: "builder", question: "Build: While / he / read / book / she / cook / dinner", words: ["While", "he", "was reading", "a book", "she", "was cooking", "dinner"], answer: "While he was reading a book she was cooking dinner" },
+      { type: "builder", question: "Build: I / see / accident / while / I / drive", words: ["I", "saw", "an accident", "while", "I", "was driving"], answer: "I saw an accident while I was driving" }
+    ];
+
+    function showQuestion() {
+      if (currentQ >= questions.length || timeLeft <= 0) {
+        clearInterval(timer);
+        showFinal();
+        return;
+      }
+
+      const q = questions[currentQ];
+      questionEl.textContent = "";
+      optionsEl.innerHTML = "";
+      wordsEl.innerHTML = "";
+      builtSentenceEl.textContent = "";
+      submitBtn.style.display = "none";
+      feedback.textContent = "";
+
+      if (q.type === "mc") {
+        questionEl.textContent = q.question;
+        q.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.textContent = opt;
+          btn.onclick = () => checkMC(opt, q.answer);
+          optionsEl.appendChild(btn);
+        });
+      } else if (q.type === "builder") {
+        questionEl.textContent = q.question;
+        let shuffled = q.words.slice().sort(() => Math.random() - 0.5);
+        shuffled.forEach(word => {
+          const span = document.createElement("span");
+          span.textContent = word;
+          span.onclick = () => {
+            built += word + " ";
+            builtSentenceEl.textContent = built.trim();
+            span.style.display = "none";
+          }
+          wordsEl.appendChild(span);
+        });
+        submitBtn.style.display = "inline-block";
+        submitBtn.onclick = () => {
+          if (built.trim() === q.answer) {
+            score += 15;
+            showFeedback(true, "🎉");
+          } else {
+            showFeedback(false, "😢");
+          }
+          scoreEl.textContent = `Score: ${score}`;
+          built = "";
+          currentQ++;
+          setTimeout(showQuestion, 500);
+        }
+      } else if (q.type === "mistake") {
+        let words = q.sentence.split(" ");
+        questionEl.textContent = "Click the mistake:";
+        words.forEach(word => {
+          const span = document.createElement("span");
+          span.textContent = word;
+          span.onclick = () => {
+            if (word === q.wrong) {
+              span.textContent = q.correct;
+              span.style.background = "#4caf50";
+              span.style.color = "#fff";
+              score += 20;
+              showFeedback(true, "✨");
+              scoreEl.textContent = `Score: ${score}`;
+              currentQ++;
+              setTimeout(showQuestion, 500);
+            } else {
+              showFeedback(false, "🚫");
+            }
+          }
+          wordsEl.appendChild(span);
+        });
+      }
+    }
+
+    function checkMC(selected, correct) {
+      if (selected === correct) {
+        score += 10;
+        showFeedback(true, "👍");
+      } else {
+        showFeedback(false, "❌");
+      }
+      scoreEl.textContent = `Score: ${score}`;
+      currentQ++;
+      setTimeout(showQuestion, 500);
+    }
+
+    function showFeedback(success, emoji) {
+      feedback.textContent = emoji;
+      feedback.className = success ? 'feedback-success' : 'feedback-error';
+      setTimeout(() => {
+        feedback.textContent = '';
+        feedback.className = '';
+      }, 800);
+    }
+
+    function showFinal() {
+      questionEl.style.display = "none";
+      optionsEl.style.display = "none";
+      wordsEl.style.display = "none";
+      builtSentenceEl.style.display = "none";
+      submitBtn.style.display = "none";
+      feedback.style.display = "none";
+      timerEl.style.display = "none";
+      finalScreen.style.display = "block";
+      finalScreen.innerHTML = `✨ <br> Time's up!<br> Your final score: ${score}`;
+    }
+
+    timer = setInterval(() => {
+      timeLeft--;
+      timerEl.textContent = `Time: ${timeLeft}`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        showFinal();
+      }
+    }, 1000);
+
+    showQuestion();
+  </script>
+</body>
+</html>
