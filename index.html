@@ -1,410 +1,333 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Репетитор Онлайн</title>
-  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <title>Past Simple vs Past Continuous Quest</title>
   <style>
-    :root {
-      --gold: #BFA046;
-      --dark: #2E2C2A;
-      --text: #333;
-      --pastel1: #f9f6f1;
-      --pastel2: #f3e7e9;
-      --pastel3: #e9f0f3;
-    }
-
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
-      height: 100%;
-      scroll-behavior: smooth;
-    }
+    @import url('https://fonts.googleapis.com/css2?family=Fredoka+One&display=swap');
 
     body {
-      font-family: 'Montserrat', sans-serif;
-      color: var(--text);
-      background: linear-gradient(135deg, var(--pastel1), var(--pastel2), var(--pastel3));
-      animation: gradientMove 10s ease infinite;
-      background-size: 400% 400%;
-      line-height: 1.6;
+      margin: 0;
+      padding: 0;
+      background: linear-gradient(135deg, #ff9eb3, #ffb5e1);
+      font-family: 'Fredoka One', cursive;
       overflow-x: hidden;
     }
 
-    @keyframes gradientMove {
-      0% { background-position: 0% 50%; }
-      50% { background-position: 100% 50%; }
-      100% { background-position: 0% 50%; }
-    }
-
-    header {
-      background: var(--dark);
-      color: var(--gold);
-      padding: 20px 40px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      position: sticky;
-      top: 0;
-      z-index: 10;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-    }
-
-    header h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 1.8rem;
-    }
-
-    nav a {
-      color: var(--gold);
-      margin-left: 30px;
-      text-decoration: none;
-      font-weight: bold;
-      transition: color 0.3s;
-    }
-
-    nav a:hover {
-      color: #fff;
-    }
-
-    .hero {
-      min-height: 90vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .container {
+      max-width: 800px;
+      margin: 30px auto;
+      background: #fff0f6;
+      border-radius: 20px;
+      padding: 40px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
       text-align: center;
-      padding: 40px 20px;
       position: relative;
-      overflow: hidden;
     }
 
-    .hero h2 {
-      font-family: 'Playfair Display', serif;
-      font-size: 3rem;
-      color: #2E2C2A;
-      margin-bottom: 20px;
-      opacity: 0;
-      transform: translateY(20px);
-      animation: fadeUp 1.5s forwards;
-    }
-
-    .hero p {
-      font-size: 1.2rem;
-      margin-bottom: 30px;
-      opacity: 0;
-      animation: fadeUp 2s forwards;
-    }
-
-    .hero a {
-      background: var(--gold);
-      color: #fff;
-      padding: 15px 30px;
-      border-radius: 30px;
-      font-weight: bold;
-      text-decoration: none;
-      transition: background 0.3s;
-    }
-
-    .hero a:hover {
-      background: #9f8535;
-    }
-
-    section {
-      padding: 80px 20px;
-      max-width: 1100px;
-      margin: 0 auto;
-      text-align: center;
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all 0.8s ease;
-    }
-
-    section.visible {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    section h2 {
-      font-family: 'Playfair Display', serif;
-      color: var(--gold);
-      font-size: 2.5rem;
-      margin-bottom: 30px;
-    }
-
-    .services {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-    }
-
-    .service-card {
-      background: #fff;
-      padding: 30px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      transition: transform 0.5s;
-    }
-
-    .service-card:hover {
-      transform: translateY(-10px) scale(1.03);
-    }
-
-    .service-card h3 {
-      color: var(--gold);
-      margin-bottom: 15px;
-    }
-
-    .video-container {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 30px;
-      justify-content: center;
-    }
-
-    .video-container iframe {
-      width: 100%;
-      max-width: 480px;
-      height: 270px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-
-    .reviews {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-      gap: 30px;
-    }
-
-    .review {
-      background: #fff;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-    }
-
-    .stars {
-      color: var(--gold);
+    h1 {
+      font-size: 48px;
+      color: #ff4081;
       margin-bottom: 10px;
+      letter-spacing: 2px;
+      text-shadow: 2px 2px #fff;
     }
 
-    .tariffs {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 30px;
-      text-align: left;
+    #score, #timer {
+      font-size: 24px;
+      margin: 10px;
+      display: inline-block;
+      background: #fff;
+      padding: 5px 15px;
+      border-radius: 12px;
+      color: #ff4081;
+      box-shadow: 2px 2px #ff7eb3;
     }
 
-    .tariff-card {
+    .question-box {
       background: #fff;
       padding: 30px;
+      border-radius: 20px;
+      margin: 30px 0;
+      font-size: 24px;
+      color: #ff4081;
+      position: relative;
+      min-height: 100px;
+    }
+
+    .options button, .words span, #submitBtn, #undoBtn {
+      background: #ff4081;
+      border: none;
+      color: #fff;
+      padding: 10px 20px;
+      font-size: 20px;
+      border-radius: 15px;
+      margin: 10px;
+      cursor: pointer;
+      transition: 0.3s;
+    }
+
+    .options button:hover,
+    .words span:hover,
+    #submitBtn:hover,
+    #undoBtn:hover {
+      background: #ff7eb3;
+      transform: scale(1.1);
+    }
+
+    .words span {
+      display: inline-block;
+      background: #ffd1e8;
+      color: #ff4081;
+      margin: 5px;
+      padding: 8px 12px;
       border-radius: 10px;
-      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      transition: transform 0.5s;
-    }
-
-    .tariff-card:hover {
-      transform: translateY(-10px) scale(1.03);
-    }
-
-    .tariff-card h3 {
-      color: var(--gold);
-      margin-bottom: 15px;
-    }
-
-    form {
-      max-width: 600px;
-      margin: 0 auto;
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-    }
-
-    form input, form textarea {
-      padding: 15px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-family: inherit;
-    }
-
-    form button {
-      background: var(--gold);
-      color: #fff;
-      padding: 15px;
-      border: none;
-      border-radius: 30px;
-      font-weight: bold;
       cursor: pointer;
-      transition: background 0.3s;
     }
 
-    form button:hover {
-      background: #9f8535;
+    #builtSentence {
+      margin-top: 20px;
+      font-size: 24px;
+      color: #d81b60;
+      min-height: 30px;
     }
 
-    .pay-button {
-      background: var(--gold);
-      color: #fff;
-      padding: 15px 30px;
-      border: none;
-      border-radius: 30px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: background 0.3s;
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.4); }
+      100% { transform: scale(1); }
     }
 
-    .pay-button:hover {
-      background: #9f8535;
+    @keyframes shake {
+      0% { transform: translateX(0); }
+      25% { transform: translateX(-8px); }
+      50% { transform: translateX(8px); }
+      75% { transform: translateX(-6px); }
+      100% { transform: translateX(0); }
     }
 
-    footer {
-      background: var(--dark);
-      color: var(--gold);
-      text-align: center;
-      padding: 20px;
-      margin-top: 50px;
+    .feedback-success {
+      color: #4caf50;
+      animation: pulse 0.6s ease;
+      font-size: 40px;
     }
 
-    @keyframes fadeUp {
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
+    .feedback-error {
+      color: #f44336;
+      animation: shake 0.5s ease;
+      font-size: 40px;
+    }
+
+    #finalScreen {
+      display: none;
+      font-size: 28px;
+      color: #d81b60;
     }
   </style>
 </head>
 <body>
+  <audio id="bgMusic" src="https://cdn.pixabay.com/audio/2023/03/15/audio_d1f95b8d6a.mp3" loop></audio>
 
-  <header>
-    <h1>Репетитор</h1>
-    <nav>
-      <a href="#about">Обо мне</a>
-      <a href="#services">Услуги</a>
-      <a href="#videos">Видео</a>
-      <a href="#reviews">Отзывы</a>
-      <a href="#tariffs">Тарифы</a>
-      <a href="#contact">Запись</a>
-      <a href="#payment">Оплата</a>
-    </nav>
-  </header>
+  <div class="container">
+    <h1>Pink Quest</h1>
+    <div id="score">Score: 0</div>
+    <div id="timer">Time: 60</div>
 
-  <section class="hero">
-    <div>
-      <h2>Онлайн-репетитор для детей</h2>
-      <p>Английский и предметы начальной школы. Новый подход к обучению.</p>
-      <a href="#contact">Записаться на урок</a>
+    <div class="question-box">
+      <div id="question"></div>
+      <div id="options" class="options"></div>
+      <div id="words" class="words"></div>
+      <div id="builtSentence"></div>
+      <button id="submitBtn" style="display:none;">Submit</button>
+      <button id="undoBtn" style="display:none;">Undo</button>
+      <div id="feedback"></div>
     </div>
-  </section>
 
-  <section id="about">
-    <h2>Обо мне</h2>
-    <p>Я — профессиональный репетитор с 7-летним опытом работы с детьми. Провожу онлайн-занятия по английскому языку и предметам начальной школы. Умею находить подход к каждому ребёнку и делать обучение увлекательным и результативным.</p>
-  </section>
-
-  <section id="services">
-    <h2>Услуги</h2>
-    <div class="services">
-      <div class="service-card">
-        <h3>Английский язык</h3>
-        <p>Подготовка к школе, грамматика, чтение, разговорный английский.</p>
-      </div>
-      <div class="service-card">
-        <h3>Математика</h3>
-        <p>Объясняю математику просто и на примерах.</p>
-      </div>
-      <div class="service-card">
-        <h3>Чтение и письмо</h3>
-        <p>Помогаю развить грамотность и любовь к чтению.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="videos">
-    <h2>Видео</h2>
-    <div class="video-container">
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="Видео обо мне" frameborder="0" allowfullscreen></iframe>
-      <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="Демонстрация урока" frameborder="0" allowfullscreen></iframe>
-    </div>
-  </section>
-
-  <section id="reviews">
-    <h2>Отзывы</h2>
-    <div class="reviews">
-      <div class="review">
-        <div class="stars">★★★★★</div>
-        <p>«Мой сын стал говорить на английском уже через пару месяцев. Спасибо за терпение и индивидуальный подход!»<br><strong>— Марина</strong></p>
-      </div>
-      <div class="review">
-        <div class="stars">★★★★☆</div>
-        <p>«Очень нравится, как проходят занятия. Ребёнку интересно, а это главное.»<br><strong>— Ольга</strong></p>
-      </div>
-      <div class="review">
-        <div class="stars">★★★★★</div>
-        <p>«Занятия живые и весёлые, дочь ждёт каждый урок с нетерпением.»<br><strong>— Светлана</strong></p>
-      </div>
-    </div>
-  </section>
-
-  <section id="tariffs">
-    <h2>Тарифы</h2>
-    <div class="tariffs">
-      <div class="tariff-card">
-        <h3>Предоплата за месяц</h3>
-        <p>Подходит для регулярных занятий и закрепления материала.</p>
-      </div>
-      <div class="tariff-card">
-        <h3>Предоплата за две недели</h3>
-        <p>Гибкий вариант для тех, кто хочет попробовать и определиться.</p>
-      </div>
-      <div class="tariff-card">
-        <h3>Предоплата за два урока</h3>
-        <p>Оптимально для знакомства и оценки формата уроков.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="contact">
-    <h2>Записаться на урок</h2>
-    <form onsubmit="submitForm(event)">
-      <input type="text" placeholder="Ваше имя" required />
-      <input type="email" placeholder="Email" required />
-      <textarea placeholder="Ваше сообщение" rows="4"></textarea>
-      <button type="submit">Отправить</button>
-    </form>
-  </section>
-
-  <section id="payment">
-    <h2>Оплата урока</h2>
-    <p>Нажмите кнопку ниже, чтобы перейти к оплате.</p>
-    <button class="pay-button" onclick="alert('Переход к платёжной системе (заглушка)')">Оплатить</button>
-  </section>
-
-  <footer>
-    © 2025 Репетитор Онлайн
-  </footer>
+    <div id="finalScreen"></div>
+  </div>
 
   <script>
-    function submitForm(e) {
-      e.preventDefault();
-      alert("Спасибо! Ваша заявка отправлена.");
+    const bgMusic = document.getElementById('bgMusic');
+    bgMusic.volume = 0.3;
+    document.body.addEventListener("click", () => {
+      bgMusic.play().catch(()=>{});
+    }, {once:true});
+
+    const scoreEl = document.getElementById('score');
+    const timerEl = document.getElementById('timer');
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const wordsEl = document.getElementById('words');
+    const builtSentenceEl = document.getElementById('builtSentence');
+    const submitBtn = document.getElementById('submitBtn');
+    const undoBtn = document.getElementById('undoBtn');
+    const feedback = document.getElementById('feedback');
+    const finalScreen = document.getElementById('finalScreen');
+
+    let score = 0;
+    let timeLeft = 60;
+    let timer;
+    let currentQ = 0;
+    let built = "";
+    let chosenWords = [];
+
+    const questions = [
+      // Level 1 - Multiple Choice
+      { type: "mc", question: "I _______ my friend when I saw a strange light.", options: ["talked", "was talking"], answer: "was talking" },
+      { type: "mc", question: "She ______ her homework last night.", options: ["did", "was doing"], answer: "did" },
+
+      // Level 2 - Sentence Builder
+      { type: "builder", question: "Build: He / play / football / when / it / start / rain", words: ["He", "was playing", "football", "when", "it", "started", "to rain"], answer: "He was playing football when it started to rain" },
+      { type: "builder", question: "Build: They / watch / movie / when / phone / ring", words: ["They", "were watching", "a movie", "when", "the phone", "rang"], answer: "They were watching a movie when the phone rang" },
+
+      // Level 3 - Mistake Finder
+      { type: "mistake", sentence: "I was saw a cat in the garden.", wrong: "was", correct: "saw" },
+      { type: "mistake", sentence: "She was go to school yesterday.", wrong: "was", correct: "went" },
+
+      // Level 4 - Sentence Ordering
+      { type: "builder", question: "Build: While / he / read / book / she / cook / dinner", words: ["While", "he", "was reading", "a book", "she", "was cooking", "dinner"], answer: "While he was reading a book she was cooking dinner" },
+      { type: "builder", question: "Build: I / see / accident / while / I / drive", words: ["I", "saw", "an accident", "while", "I", "was driving"], answer: "I saw an accident while I was driving" }
+    ];
+
+    function showQuestion() {
+      if (currentQ >= questions.length || timeLeft <= 0) {
+        clearInterval(timer);
+        showFinal();
+        return;
+      }
+
+      const q = questions[currentQ];
+      questionEl.textContent = "";
+      optionsEl.innerHTML = "";
+      wordsEl.innerHTML = "";
+      builtSentenceEl.textContent = "";
+      submitBtn.style.display = "none";
+      undoBtn.style.display = "none";
+      feedback.textContent = "";
+      built = "";
+      chosenWords = [];
+
+      if (q.type === "mc") {
+        questionEl.textContent = q.question;
+        q.options.forEach(opt => {
+          const btn = document.createElement("button");
+          btn.textContent = opt;
+          btn.onclick = () => checkMC(opt, q.answer);
+          optionsEl.appendChild(btn);
+        });
+      } else if (q.type === "builder") {
+        questionEl.textContent = q.question;
+        let shuffled = q.words.slice().sort(() => Math.random() - 0.5);
+        shuffled.forEach(word => {
+          const span = document.createElement("span");
+          span.textContent = word;
+          span.onclick = () => {
+            built += word + " ";
+            chosenWords.push({ word: word, span: span });
+            builtSentenceEl.textContent = built.trim();
+            span.style.display = "none";
+            undoBtn.style.display = "inline-block";
+          }
+          wordsEl.appendChild(span);
+        });
+
+        submitBtn.style.display = "inline-block";
+        submitBtn.onclick = () => {
+          if (built.trim() === q.answer) {
+            score += 15;
+            showFeedback(true, "🎉");
+          } else {
+            showFeedback(false, "😢");
+          }
+          scoreEl.textContent = `Score: ${score}`;
+          built = "";
+          chosenWords = [];
+          undoBtn.style.display = "none";
+          currentQ++;
+          setTimeout(showQuestion, 500);
+        };
+      } else if (q.type === "mistake") {
+        let words = q.sentence.split(" ");
+        questionEl.textContent = "Click the mistake:";
+        words.forEach(word => {
+          const span = document.createElement("span");
+          span.textContent = word;
+          span.onclick = () => {
+            if (word === q.wrong) {
+              span.textContent = q.correct;
+              span.style.background = "#4caf50";
+              span.style.color = "#fff";
+              score += 20;
+              showFeedback(true, "✨");
+              scoreEl.textContent = `Score: ${score}`;
+              currentQ++;
+              setTimeout(showQuestion, 500);
+            } else {
+              showFeedback(false, "🚫");
+            }
+          };
+          wordsEl.appendChild(span);
+        });
+      }
     }
 
-    // Плавное появление блоков при скролле
-    const sections = document.querySelectorAll('section');
-    const observer = new IntersectionObserver(entries => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
+    undoBtn.onclick = () => {
+      if (chosenWords.length > 0) {
+        const last = chosenWords.pop();
+        built = built.trimEnd().slice(0, built.trimEnd().lastIndexOf(" "));
+        builtSentenceEl.textContent = built.trim();
+        last.span.style.display = "inline-block";
+
+        if (chosenWords.length === 0) {
+          undoBtn.style.display = "none";
         }
-      });
-    }, { threshold: 0.2 });
+      }
+    };
 
-    sections.forEach(sec => observer.observe(sec));
+    function checkMC(selected, correct) {
+      if (selected === correct) {
+        score += 10;
+        showFeedback(true, "👍");
+      } else {
+        showFeedback(false, "❌");
+      }
+      scoreEl.textContent = `Score: ${score}`;
+      currentQ++;
+      setTimeout(showQuestion, 500);
+    }
+
+    function showFeedback(success, emoji) {
+      feedback.textContent = emoji;
+      feedback.className = success ? 'feedback-success' : 'feedback-error';
+      setTimeout(() => {
+        feedback.textContent = '';
+        feedback.className = '';
+      }, 800);
+    }
+
+    function showFinal() {
+      questionEl.style.display = "none";
+      optionsEl.style.display = "none";
+      wordsEl.style.display = "none";
+      builtSentenceEl.style.display = "none";
+      submitBtn.style.display = "none";
+      undoBtn.style.display = "none";
+      feedback.style.display = "none";
+      timerEl.style.display = "none";
+      finalScreen.style.display = "block";
+      finalScreen.innerHTML = `✨ <br> Game Over!<br> Your final score: ${score}`;
+    }
+
+    timer = setInterval(() => {
+      timeLeft--;
+      timerEl.textContent = `Time: ${timeLeft}`;
+      if (timeLeft <= 0) {
+        clearInterval(timer);
+        showFinal();
+      }
+    }, 1000);
+
+    showQuestion();
   </script>
-
 </body>
 </html>
