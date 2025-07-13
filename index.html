@@ -1,91 +1,410 @@
-from fpdf import FPDF
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Репетитор Онлайн</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;700&family=Playfair+Display:wght@700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --gold: #BFA046;
+      --dark: #2E2C2A;
+      --text: #333;
+      --pastel1: #f9f6f1;
+      --pastel2: #f3e7e9;
+      --pastel3: #e9f0f3;
+    }
 
-class PDF(FPDF):
-    def header(self):
-        self.set_font('Arial', 'B', 14)
-        self.cell(0, 10, 'Comparative Table of Lesson Annotations', ln=True, align='C')
-        self.ln(5)
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    def chapter_title(self, title):
-        self.set_font('Arial', 'B', 12)
-        self.cell(0, 10, title, ln=True)
-        self.ln(3)
+    html, body {
+      height: 100%;
+      scroll-behavior: smooth;
+    }
 
-    def chapter_body(self, body):
-        self.set_font('Arial', '', 11)
-        self.multi_cell(0, 8, body)
-        self.ln()
+    body {
+      font-family: 'Montserrat', sans-serif;
+      color: var(--text);
+      background: linear-gradient(135deg, var(--pastel1), var(--pastel2), var(--pastel3));
+      animation: gradientMove 10s ease infinite;
+      background-size: 400% 400%;
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
 
-    def improved_multi_cell(self, w, h, txt, border=1, align='L', fill=False):
-        # Save x,y
-        x = self.get_x()
-        y = self.get_y()
-        self.multi_cell(w, h, txt, border=border, align=align, fill=fill)
-        # Get new y
-        new_y = self.get_y()
-        # Move cursor to right of the multicell
-        self.set_xy(x + w, y)
-        return new_y - y  # height of multicell
+    @keyframes gradientMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
 
-pdf = PDF()
-pdf.add_page()
+    header {
+      background: var(--dark);
+      color: var(--gold);
+      padding: 20px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
 
-pdf.set_font('Arial', 'B', 12)
-pdf.cell(0, 10, 'Comparative Table of Two Lesson Annotations', ln=True, align='C')
-pdf.ln(5)
+    header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.8rem;
+    }
 
-# Table header
-pdf.set_font('Arial', 'B', 11)
-pdf.cell(50, 10, 'Criteria', border=1, align='C')
-pdf.cell(65, 10, 'Original Lesson Annotation', border=1, align='C')
-pdf.cell(65, 10, 'Lexical Approach Annotation', border=1, align='C')
-pdf.ln()
+    nav a {
+      color: var(--gold);
+      margin-left: 30px;
+      text-decoration: none;
+      font-weight: bold;
+      transition: color 0.3s;
+    }
 
-pdf.set_font('Arial', '', 11)
+    nav a:hover {
+      color: #fff;
+    }
 
-rows = [
-    ("Level", "A2+/B1", "A2+/B1"),
-    ("Topic", "Lifestyle Stories", "Lifestyle Stories"),
-    ("Lesson Goal", "Developing speaking, listening, and writing skills through grammar and vocabulary", 
-     "Developing skills in perceiving and using lexical chunks on lifestyle topic"),
-    ("Vocabulary Focus", "Revising and activating vocabulary as separate phrases", 
-     "Activating and expanding vocabulary via collocations and fixed expressions"),
-    ("Grammar Focus", "Explanation and practice of Past Simple and Past Continuous", 
-     "Minimal grammar, focus on mastering lexical units, grammar learned contextually"),
-    ("Pronunciation", "Exercises on word stress", "Working on rhythm and stress in whole lexical chunks"),
-    ("Speaking Skills", "Storytelling using grammatical structures and vocabulary", 
-     "Storytelling based on learned lexical chunks and connectors"),
-    ("Exercise Types", "Matching, gap-fill, dialogue", 
-     "Matching collocations, chunk gap-fill, pair storytelling"),
-    ("Video Usage", "Predicting plot, discussion, using vocabulary", 
-     "Transferring learned chunks to new video contexts"),
-    ("Main Approach", "Combination of vocabulary and grammar with focus on grammar", 
-     "Lexical approach - teaching through ready-made lexical units and repetition"),
-    ("Lesson Outcome", "Developing storytelling skills with grammatical accuracy and vocabulary", 
-     "Developing fluency and naturalness through automation of lexical chunks")
-]
+    .hero {
+      min-height: 90vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 40px 20px;
+      position: relative;
+      overflow: hidden;
+    }
 
-def clean_text(text):
-    return text.replace('—', '-').replace('’', "'")
+    .hero h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 3rem;
+      color: #2E2C2A;
+      margin-bottom: 20px;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 1.5s forwards;
+    }
 
-for row in rows:
-    max_height = 0
-    x_start = pdf.get_x()
-    y_start = pdf.get_y()
-    # Print first cell
-    height1 = pdf.improved_multi_cell(50, 7, clean_text(row[0]), border=1)
-    # Set y back to top for second cell
-    pdf.set_xy(x_start + 50, y_start)
-    height2 = pdf.improved_multi_cell(65, 7, clean_text(row[1]), border=1)
-    # Set y back to top for third cell
-    pdf.set_xy(x_start + 115, y_start)
-    height3 = pdf.improved_multi_cell(65, 7, clean_text(row[2]), border=1)
-    # Go to next line based on highest cell
-    max_height = max(height1, height2, height3)
-    pdf.set_xy(x_start, y_start + max_height)
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      opacity: 0;
+      animation: fadeUp 2s forwards;
+    }
 
-file_path = "/mnt/data/Comparative_Annotations_Table_wrapped.pdf"
-pdf.output(file_path)
+    .hero a {
+      background: var(--gold);
+      color: #fff;
+      padding: 15px 30px;
+      border-radius: 30px;
+      font-weight: bold;
+      text-decoration: none;
+      transition: background 0.3s;
+    }
 
-file_path
+    .hero a:hover {
+      background: #9f8535;
+    }
 
+    section {
+      padding: 80px 20px;
+      max-width: 1100px;
+      margin: 0 auto;
+      text-align: center;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: all 0.8s ease;
+    }
+
+    section.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    section h2 {
+      font-family: 'Playfair Display', serif;
+      color: var(--gold);
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
+
+    .services {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+    }
+
+    .service-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: transform 0.5s;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px) scale(1.03);
+    }
+
+    .service-card h3 {
+      color: var(--gold);
+      margin-bottom: 15px;
+    }
+
+    .video-container {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 30px;
+      justify-content: center;
+    }
+
+    .video-container iframe {
+      width: 100%;
+      max-width: 480px;
+      height: 270px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .reviews {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 30px;
+    }
+
+    .review {
+      background: #fff;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+    }
+
+    .stars {
+      color: var(--gold);
+      margin-bottom: 10px;
+    }
+
+    .tariffs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      text-align: left;
+    }
+
+    .tariff-card {
+      background: #fff;
+      padding: 30px;
+      border-radius: 10px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      transition: transform 0.5s;
+    }
+
+    .tariff-card:hover {
+      transform: translateY(-10px) scale(1.03);
+    }
+
+    .tariff-card h3 {
+      color: var(--gold);
+      margin-bottom: 15px;
+    }
+
+    form {
+      max-width: 600px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    form input, form textarea {
+      padding: 15px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-family: inherit;
+    }
+
+    form button {
+      background: var(--gold);
+      color: #fff;
+      padding: 15px;
+      border: none;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    form button:hover {
+      background: #9f8535;
+    }
+
+    .pay-button {
+      background: var(--gold);
+      color: #fff;
+      padding: 15px 30px;
+      border: none;
+      border-radius: 30px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+
+    .pay-button:hover {
+      background: #9f8535;
+    }
+
+    footer {
+      background: var(--dark);
+      color: var(--gold);
+      text-align: center;
+      padding: 20px;
+      margin-top: 50px;
+    }
+
+    @keyframes fadeUp {
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Репетитор</h1>
+    <nav>
+      <a href="#about">Обо мне</a>
+      <a href="#services">Услуги</a>
+      <a href="#videos">Видео</a>
+      <a href="#reviews">Отзывы</a>
+      <a href="#tariffs">Тарифы</a>
+      <a href="#contact">Запись</a>
+      <a href="#payment">Оплата</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <div>
+      <h2>Онлайн-репетитор для детей</h2>
+      <p>Английский и предметы начальной школы. Новый подход к обучению.</p>
+      <a href="#contact">Записаться на урок</a>
+    </div>
+  </section>
+
+  <section id="about">
+    <h2>Обо мне</h2>
+    <p>Я — профессиональный репетитор с 7-летним опытом работы с детьми. Провожу онлайн-занятия по английскому языку и предметам начальной школы. Умею находить подход к каждому ребёнку и делать обучение увлекательным и результативным.</p>
+  </section>
+
+  <section id="services">
+    <h2>Услуги</h2>
+    <div class="services">
+      <div class="service-card">
+        <h3>Английский язык</h3>
+        <p>Подготовка к школе, грамматика, чтение, разговорный английский.</p>
+      </div>
+      <div class="service-card">
+        <h3>Математика</h3>
+        <p>Объясняю математику просто и на примерах.</p>
+      </div>
+      <div class="service-card">
+        <h3>Чтение и письмо</h3>
+        <p>Помогаю развить грамотность и любовь к чтению.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="videos">
+    <h2>Видео</h2>
+    <div class="video-container">
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_1" title="Видео обо мне" frameborder="0" allowfullscreen></iframe>
+      <iframe src="https://www.youtube.com/embed/VIDEO_ID_2" title="Демонстрация урока" frameborder="0" allowfullscreen></iframe>
+    </div>
+  </section>
+
+  <section id="reviews">
+    <h2>Отзывы</h2>
+    <div class="reviews">
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>«Мой сын стал говорить на английском уже через пару месяцев. Спасибо за терпение и индивидуальный подход!»<br><strong>— Марина</strong></p>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★☆</div>
+        <p>«Очень нравится, как проходят занятия. Ребёнку интересно, а это главное.»<br><strong>— Ольга</strong></p>
+      </div>
+      <div class="review">
+        <div class="stars">★★★★★</div>
+        <p>«Занятия живые и весёлые, дочь ждёт каждый урок с нетерпением.»<br><strong>— Светлана</strong></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="tariffs">
+    <h2>Тарифы</h2>
+    <div class="tariffs">
+      <div class="tariff-card">
+        <h3>Предоплата за месяц</h3>
+        <p>Подходит для регулярных занятий и закрепления материала.</p>
+      </div>
+      <div class="tariff-card">
+        <h3>Предоплата за две недели</h3>
+        <p>Гибкий вариант для тех, кто хочет попробовать и определиться.</p>
+      </div>
+      <div class="tariff-card">
+        <h3>Предоплата за два урока</h3>
+        <p>Оптимально для знакомства и оценки формата уроков.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact">
+    <h2>Записаться на урок</h2>
+    <form onsubmit="submitForm(event)">
+      <input type="text" placeholder="Ваше имя" required />
+      <input type="email" placeholder="Email" required />
+      <textarea placeholder="Ваше сообщение" rows="4"></textarea>
+      <button type="submit">Отправить</button>
+    </form>
+  </section>
+
+  <section id="payment">
+    <h2>Оплата урока</h2>
+    <p>Нажмите кнопку ниже, чтобы перейти к оплате.</p>
+    <button class="pay-button" onclick="alert('Переход к платёжной системе (заглушка)')">Оплатить</button>
+  </section>
+
+  <footer>
+    © 2025 Репетитор Онлайн
+  </footer>
+
+  <script>
+    function submitForm(e) {
+      e.preventDefault();
+      alert("Спасибо! Ваша заявка отправлена.");
+    }
+
+    // Плавное появление блоков при скролле
+    const sections = document.querySelectorAll('section');
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+        }
+      });
+    }, { threshold: 0.2 });
+
+    sections.forEach(sec => observer.observe(sec));
+  </script>
+
+</body>
+</html>
