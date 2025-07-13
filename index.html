@@ -1,0 +1,597 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TripAside: Airport & Travel English Lesson (B1)</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f7f6;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0,0,0,0.1);
+        }
+        h1, h2, h3 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 5px;
+            margin-top: 30px;
+        }
+        h1 { font-size: 2.2em; border-bottom-color: #2980b9; }
+        h2 { font-size: 1.8em; }
+        h3 { font-size: 1.4em; }
+
+        .section {
+            background-color: #ffffff;
+            padding: 20px;
+            margin-bottom: 25px;
+            border-radius: 6px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .activity p {
+            margin-bottom: 10px;
+        }
+        .activity ol, .activity ul {
+            margin-left: 25px;
+            margin-bottom: 15px;
+        }
+
+        /* Vocabulary Matching Styles */
+        .match-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-top: 20px;
+        }
+        .words-list, .images-list {
+            list-style: none;
+            padding: 0;
+            background-color: #ecf0f1;
+            border-radius: 5px;
+            padding: 10px;
+        }
+        .words-list li, .image-item {
+            background-color: #ffffff;
+            border: 1px solid #bdc3c7;
+            padding: 10px 15px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            cursor: grab;
+            transition: background-color 0.2s ease;
+        }
+        .words-list li:hover, .image-item:hover {
+            background-color: #e0e6e7;
+        }
+        .image-item img {
+            max-width: 100px; /* Adjust as needed */
+            height: auto;
+            display: block;
+            margin: 0 auto;
+        }
+        .drop-target {
+            min-height: 50px;
+            border: 2px dashed #3498db;
+            background-color: #ecf0f1;
+            margin-top: 10px;
+            padding: 10px;
+            text-align: center;
+            line-height: 30px;
+            color: #888;
+            border-radius: 4px;
+        }
+        .drop-target.hover {
+            background-color: #dbe4f1;
+            border-color: #2980b9;
+        }
+        .matched-item {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+            padding: 8px;
+            margin-bottom: 5px;
+            border-radius: 3px;
+        }
+        .correct { background-color: #d4edda; border-color: #28a745; }
+        .incorrect { background-color: #f8d7da; border-color: #dc3545; }
+
+        /* Answer Button Styling */
+        .show-answer-btn {
+            background-color: #3498db;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 15px;
+            display: inline-block;
+            transition: background-color 0.2s ease;
+        }
+        .show-answer-btn:hover {
+            background-color: #2980b9;
+        }
+        .answer-key {
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            display: none; /* Hidden by default */
+        }
+
+        /* Pronunciation Sort Styling */
+        .sort-container {
+            display: flex;
+            gap: 20px;
+            margin-top: 20px;
+            flex-wrap: wrap;
+        }
+        .sort-category {
+            flex: 1;
+            min-width: 250px;
+            background-color: #ecf0f1;
+            border: 1px solid #bdc3c7;
+            border-radius: 5px;
+            padding: 15px;
+            min-height: 150px;
+        }
+        .sort-category h4 {
+            margin-top: 0;
+            color: #2c3e50;
+            border-bottom: 1px solid #bdc3c7;
+            padding-bottom: 5px;
+            margin-bottom: 10px;
+        }
+        .sort-word {
+            background-color: #ffffff;
+            border: 1px solid #bdc3c7;
+            padding: 8px 12px;
+            margin-bottom: 8px;
+            border-radius: 4px;
+            cursor: grab;
+            transition: background-color 0.2s ease;
+        }
+        .sort-word:hover {
+            background-color: #e0e6e7;
+        }
+
+        /* Reading Section */
+        .article-content {
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 20px;
+            border-radius: 5px;
+            font-size: 0.95em;
+            margin-top: 20px;
+        }
+        .article-content p {
+            text-indent: 1.5em;
+            margin-bottom: 0.8em;
+        }
+        .question-group {
+            margin-top: 25px;
+        }
+        .question-group ol {
+            padding-left: 20px;
+        }
+        .question-group li {
+            margin-bottom: 10px;
+        }
+        .question-group textarea {
+            width: calc(100% - 20px);
+            min-height: 60px;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        /* Audio Player Styling */
+        .audio-player {
+            margin-top: 15px;
+            margin-bottom: 15px;
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>TripAside: Airport & Travel English Lesson</h1>
+    <p><strong>Level:</strong> B1 (Intermediate)</p>
+    <p><strong>Target Audience:</strong> Teenagers</p>
+    <p><strong>Theme:</strong> Travel, Airports, Vocabulary, Pronunciation, Reading Comprehension</p>
+
+    <div class="section">
+        <h2>Part 1: Vocabulary - Airports & Travel</h2>
+
+        <h3>A. Warm-up Discussion:</h3>
+        <ul>
+            <li>When was the last time you went to an airport?</li>
+            <li>Was it to travel somewhere or to pick up or drop off someone?</li>
+        </ul>
+
+        <h3>B. Match the Airport Signs and Words:</h3>
+        <p>Look at the airport signs and match them to the words and phrases below. (<em>Note: Actual images from the source are not embedded here. This is a placeholder for a drag-and-drop interaction.</em>)</p>
+
+        <div class="match-container">
+            <div class="words-column">
+                <p><strong>Words to match:</strong></p>
+                <ul id="wordsToDrag" class="words-list">
+                    <li draggable="true" data-word="arrivals">arrivals</li>
+                    <li draggable="true" data-word="baggage reclaim">baggage reclaim</li>
+                    <li draggable="true" data-word="check-in">check-in</li>
+                    <li draggable="true" data-word="customs">customs</li>
+                    <li draggable="true" data-word="departures">departures</li>
+                    <li draggable="true" data-word="gates">gates</li>
+                    <li draggable="true" data-word="lifts">lifts</li>
+                    <li draggable="true" data-word="passport control">passport control</li>
+                    <li draggable="true" data-word="security check">security check</li>
+                    <li draggable="true" data-word="terminal">terminal</li>
+                    <li draggable="true" data-word="trolley">trolley</li>
+                    <li draggable="true" data-word="bag drop">bag drop</li>
+                </ul>
+            </div>
+            <div class="images-column">
+                <p><strong>Drag words here (simulate signs):</strong></p>
+                <div class="image-item" data-target="1">1. (Sign 1 - Arrivals) <div class="drop-target" id="drop1"></div></div>
+                <div class="image-item" data-target="2">2. (Sign 2 - Bag drop) <div class="drop-target" id="drop2"></div></div>
+                <div class="image-item" data-target="3">3. (Sign 3 - Security check) <div class="drop-target" id="drop3"></div></div>
+                <div class="image-item" data-target="4">4. (Sign 4 - Check-in) <div class="drop-target" id="drop4"></div></div>
+                <div class="image-item" data-target="5">5. (Sign 5 - Baggage reclaim) <div class="drop-target" id="drop5"></div></div>
+                <div class="image-item" data-target="6">6. (Sign 6 - Departures) <div class="drop-target" id="drop6"></div></div>
+                <div class="image-item" data-target="7">7. (Sign 7 - Gates) <div class="drop-target" id="drop7"></div></div>
+                <div class="image-item" data-target="8">8. (Sign 8 - Lifts) <div class="drop-target" id="drop8"></div></div>
+                <div class="image-item" data-target="9">9. (Sign 9 - Passport control) <div class="drop-target" id="drop9"></div></div>
+                <div class="image-item" data-target="10">10. (Sign 10 - Trolley) <div class="drop-target" id="drop10"></div></div>
+                <div class="image-item" data-target="11">11. (Sign 11 - Customs) <div class="drop-target" id="drop11"></div></div>
+                <div class="image-item" data-target="12">12. (Sign 12 - Terminal) <div class="drop-target" id="drop12"></div></div>
+            </div>
+        </div>
+        <button class="show-answer-btn" onclick="checkVocabularyMatch()">Check Answers</button>
+        <button class="show-answer-btn" onclick="showHideAnswer('vocabMatchAnswer')">Show/Hide Answer Key</button>
+        <div id="vocabMatchAnswer" class="answer-key">
+            <p><strong>Answer Key (B. Match the Airport Signs and Words):</strong></p>
+            <ol>
+                <li>Arrivals</li>
+                <li>Bag drop</li>
+                <li>Security check</li>
+                <li>Check-in</li>
+                <li>Baggage reclaim</li>
+                <li>Departures</li>
+                <li>Gates</li>
+                <li>Lifts</li>
+                <li>Passport control</li>
+                <li>Trolley</li>
+                <li>Customs</li>
+                <li>Terminal</li>
+            </ol>
+        </div>
+
+
+        <h3>C. Listen and Check / Say the Words:</h3>
+        <p>Listen to the words and phrases below. Practise saying them aloud.</p>
+        <div class="audio-player">
+            <p><strong>Audio for Part 1C:</strong> (<em>Replace with actual audio file URL</em>)</p>
+            <audio controls>
+                <source src="your-audio-file-for-vocab.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        <p><em>(Words: arrivals, bag drop, baggage reclaim, check-in, customs, departures, gates, lifts, passport control, security check, terminal, trolley)</em></p>
+
+        <h3>D. Role Play / Conversation Practice:</h3>
+        <p>Imagine you are at the airport. What announcements or conversations might you hear in these places? Write down your ideas.</p>
+        <ol>
+            <li><em>Doors opening...</em> (a lift) - <textarea placeholder="Your idea..."></textarea></li>
+            <li>(Your own idea for airport scenario) - <textarea placeholder="Your idea..."></textarea></li>
+            <li>(Your own idea for airport scenario) - <textarea placeholder="Your idea..."></textarea></li>
+            <li>(Your own idea for airport scenario) - <textarea placeholder="Your idea..."></textarea></li>
+            <li>(Your own idea for airport scenario) - <textarea placeholder="Your idea..."></textarea></li>
+            <li>(Your own idea for airport scenario) - <textarea placeholder="Your idea..."></textarea></li>
+        </ol>
+    </div>
+
+    <div class="section">
+        <h2>Part 2: Pronunciation - The Letter 'g'</h2>
+
+        <h3>A. Focus on the word "baggage":</h3>
+        <p>How are 'gg' and 'ge' pronounced in "baggage"? Discuss the two different sounds.</p>
+        <p><em>(Hint: /g/ as in **g**o and /dʒ/ as in **j**am)</em></p>
+
+        <h3>B. Sort the Words by Pronunciation:</h3>
+        <p>Drag the words into the correct category based on the pronunciation of the letter 'g'.</p>
+        <div class="sort-container">
+            <div class="words-for-sort">
+                <p><strong>Words to sort:</strong></p>
+                <ul id="wordsToSort" class="words-list">
+                    <li draggable="true" data-word="gate">gate</li>
+                    <li draggable="true" data-word="foggy">foggy</li>
+                    <li draggable="true" data-word="forget">forget</li>
+                    <li draggable="true" data-word="guide">guide</li>
+                    <li draggable="true" data-word="large">large</li>
+                    <li draggable="true" data-word="village">village</li>
+                    <li draggable="true" data-word="engineer">engineer</li>
+                    <li draggable="true" data-word="agent">agent</li>
+                    <li draggable="true" data-word="guest">guest</li>
+                    <li draggable="true" data-word="region">region</li>
+                    <li draggable="true" data-word="emergency">emergency</li>
+                    <li draggable="true" data-word="begin">begin</li>
+                    <li draggable="true" data-word="gift">gift</li>
+                    <li draggable="true" data-word="general">general</li>
+                    <li draggable="true" data-word="guarantee">guarantee</li>
+                    <li draggable="true" data-word="organize">organize</li>
+                    <li draggable="true" data-word="girl">girl</li>
+                    <li draggable="true" data-word="jazz">jazz</li>
+                </ul>
+            </div>
+            <div class="sort-category" id="hardG" data-sound="hardG">
+                <h4>Hard 'g' sound (/g/ as in 'gate')</h4>
+                </div>
+            <div class="sort-category" id="softG" data-sound="softG">
+                <h4>Soft 'g' sound (/dʒ/ as in 'jazz')</h4>
+                </div>
+        </div>
+        <button class="show-answer-btn" onclick="checkPronunciationSort()">Check Answers</button>
+        <button class="show-answer-btn" onclick="showHideAnswer('pronunciationAnswer')">Show/Hide Answer Key</button>
+        <div id="pronunciationAnswer" class="answer-key">
+            <p><strong>Answer Key (B. Sort the Words by Pronunciation):</strong></p>
+            <p><strong>Hard 'g' sound (/g/):</strong> gate, foggy, forget, guide, guest, begin, gift, guarantee, organize, girl</p>
+            <p><strong>Soft 'g' sound (/dʒ/):</strong> large, village, engineer, agent, region, emergency, general, jazz</p>
+        </div>
+
+        <h3>C. Practice Saying the Words:</h3>
+        <p>Listen to the words and repeat them. When can 'g' be pronounced /dʒ/?</p>
+        <div class="audio-player">
+            <p><strong>Audio for Part 2C:</strong> (<em>Replace with actual audio file URL</em>)</p>
+            <audio controls>
+                <source src="your-audio-file-for-pronunciation.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+        <p><em>(Rule: Generally, 'g' is pronounced /dʒ/ when followed by 'e', 'i', or 'y'.)</em></p>
+    </div>
+
+    <div class="section">
+        <h2>Part 3: Reading & Listening - "No more boring stopovers"</h2>
+
+        <h3>A. Pre-reading Discussion:</h3>
+        <ul>
+            <li>Read the article below about TripAside.</li>
+            <li>Do you think it's a good idea? Why/Why not?</li>
+        </ul>
+
+        <h3>B. Reading Comprehension - TripAside Article:</h3>
+        <div class="article-content">
+            <p><strong>No more boring stopovers – go on a guided tour!</strong></p>
+            <p>Few things are more depressing than spending hours in an airport terminal waiting for a connecting flight. But what if you could turn that dead time into an exciting mini-adventure?</p>
+            <p>Emmanuel Rozenblum and Anna Veyrenc launched their business in Paris.</p>
+            <p>There you are, sitting in the departure lounge watching the clock, or ... “And the most frustrating thing, that outside the airport there’s a foreign city which you’d really like to look around, full of great tourist attractions, restaurants, and shops. But you don’t want to leave the airport, because _______, and will miss your flight.”</p>
+            <p>Frenchman Emmanuel Rozenblum and his sister were on a stopover at Warsaw’s main airport three years ago. But _______, so they decided to go into town.</p>
+            <p>“We left the airport on our own,” says Mr Rozenblum, “but we didn’t know which bus to take, and _______.”</p>
+            <p>They caught their flight, and _______, Millions of air travellers make stopovers every year, so Emmanuel thought he could organize short guided trips into the nearest city or countryside.</p>
+            <p>His idea is that a guide picks up the travellers at the airport, takes them quickly around the sights and to a restaurant, and then _______.</p>
+            <p>In March 2015, he and business partner Anna Veyrenc started their ‘Stopover Tours’ business, called TripAside, in Paris. _______ and today it has expanded to Frankfurt, London, Brussels, Rome, and Madrid.</p>
+            <p>Now other small companies are offering similar tours worldwide, from airports kilometres away, so next time you have a long stopover between flights, _______ a book tour!</p>
+            <p style="text-align: right; font-size: 0.8em; font-style: italic;">Adapted from the British press</p>
+        </div>
+
+        <h3>C. Comprehension Questions:</h3>
+        <div class="question-group">
+            <ol>
+                <li>What is the main problem that TripAside aims to solve?
+                    <textarea placeholder="Your answer..."></textarea></li>
+                <li>Who founded TripAside and where did it start?
+                    <textarea placeholder="Your answer..."></textarea></li>
+                <li>How long do the tours typically last?
+                    <textarea placeholder="Your answer..."></textarea></li>
+                <li>What kind of places do they show people?
+                    <textarea placeholder="Your answer..."></textarea></li>
+                <li>Why do Emmanuel and Anna think their idea is a good one?
+                    <textarea placeholder="Your answer..."></textarea></li>
+                <li>In which cities did TripAside expand in 2015?
+                    <textarea placeholder="Your answer..."></textarea></li>
+                <li>Do they only offer from airports close to the city?
+                    <textarea placeholder="Your answer..."></textarea></li>
+            </ol>
+            <button class="show-answer-btn" onclick="showHideAnswer('readingAnswer')">Show/Hide Answer Key</button>
+            <div id="readingAnswer" class="answer-key">
+                <p><strong>Answer Key (C. Comprehension Questions):</strong></p>
+                <ol>
+                    <li>TripAside aims to solve the problem of long, boring stopovers at airports by turning them into short, exciting city tours.</li>
+                    <li>Emmanuel Rozenblum and Anna Veyrenc founded TripAside (originally 'Stopover Tours') in Paris.</li>
+                    <li>The tours typically last a few hours.</li>
+                    <li>They show people great tourist attractions, restaurants, and shops in the city outside the airport.</li>
+                    <li>They think it's a good idea because millions of air travellers have stopovers every year, and it offers a way to experience a foreign city instead of just waiting in the airport.</li>
+                    <li>In 2015, TripAside expanded to Frankfurt, London, Brussels, Rome, and Madrid.</li>
+                    <li>No, the article mentions that other companies (and implicitly TripAside now) offer tours from airports kilometres away, not just those close to the city centre.</li>
+                </ol>
+            </div>
+        </div>
+    </div>
+
+    <div class="section">
+        <h2>Part 4: Grammar Focus</h2>
+
+        <h3>A. Present Simple and Continuous:</h3>
+        <p>Read the article again. Find examples of verbs in the Present Simple and Present Continuous. Discuss their usage.</p>
+        <ul>
+            <li><strong>Present Simple examples:</strong> (e.g., "Few things <em>are</em> depressing...", "His idea <em>is</em>...", "Emmanuel <em>thinks</em>...")</li>
+            <li><strong>Present Continuous examples:</strong> (e.g., "There you <em>are, sitting</em>...", "small companies <em>are offering</em>...")</li>
+        </ul>
+        <p><em>(Discuss rules: Present Simple for facts, habits, routines. Present Continuous for actions happening now or around now, temporary situations.)</em></p>
+
+        <h3>B. Past Simple:</h3>
+        <p>Underline or note down all the verbs in the Past Simple tense from the "TripAside" article.</p>
+        <p><em>(e.g., "Emmanuel Rozenblum and Anna Veyrenc <strong>launched</strong>...", "they <strong>decided</strong>...", "they <strong>caught</strong>...")</em></p>
+
+        <h3>C. Phrasal Verbs:</h3>
+        <p>Find these phrasal verbs in the text (or think of them in the context of travel) and explain their meaning:</p>
+        <ul>
+            <li><strong>"pick up"</strong> (as in picking up travellers)</li>
+            <li><strong>"drop off"</strong> (as in dropping someone off at the airport)</li>
+            <li><strong>"go into"</strong> (as in going into town)</li>
+        </ul>
+        <button class="show-answer-btn" onclick="showHideAnswer('grammarAnswer')">Show/Hide Answer Key</button>
+        <div id="grammarAnswer" class="answer-key">
+            <p><strong>Answer Key (Grammar Focus):</strong></p>
+            <p><strong>Phrasal Verbs:</strong></p>
+            <ul>
+                <li><strong>pick up:</strong> to collect someone from a place (e.g., "The guide picks up the travellers at the airport.")</li>
+                <li><strong>drop off:</strong> to take someone to a place and leave them there (e.g., "My dad dropped me off at the airport.")</li>
+                <li><strong>go into:</strong> to enter a place, often a town or a building (e.g., "They decided to go into town.")</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // General function to show/hide elements
+        function showHideAnswer(id) {
+            const element = document.getElementById(id);
+            if (element.style.display === 'block') {
+                element.style.display = 'none';
+            } else {
+                element.style.display = 'block';
+            }
+        }
+
+        // --- Drag and Drop for Vocabulary (Part 1B) ---
+        let draggedItem = null;
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.closest('#wordsToDrag li')) {
+                draggedItem = e.target;
+                e.dataTransfer.setData('text/plain', e.target.dataset.word);
+                e.dataTransfer.effectAllowed = 'move';
+            } else if (e.target.closest('#wordsToSort li')) { // For pronunciation sort
+                draggedItem = e.target;
+                e.dataTransfer.setData('text/plain', e.target.dataset.word);
+                e.dataTransfer.effectAllowed = 'move';
+            }
+        });
+
+        document.addEventListener('dragover', (e) => {
+            e.preventDefault(); // Necessary to allow dropping
+            if (e.target.classList.contains('drop-target') || e.target.classList.contains('sort-category')) {
+                e.target.classList.add('hover');
+            }
+        });
+
+        document.addEventListener('dragleave', (e) => {
+            if (e.target.classList.contains('drop-target') || e.target.classList.contains('sort-category')) {
+                e.target.classList.remove('hover');
+            }
+        });
+
+        document.addEventListener('drop', (e) => {
+            e.preventDefault();
+            if (e.target.classList.contains('drop-target') && draggedItem) {
+                const dropTarget = e.target;
+                const droppedWord = draggedItem.dataset.word;
+
+                // Clear previous content in the drop target
+                dropTarget.innerHTML = '';
+                // Append the dragged word
+                const span = document.createElement('span');
+                span.classList.add('matched-item');
+                span.textContent = droppedWord;
+                dropTarget.appendChild(span);
+
+                // Remove the word from the original list
+                draggedItem.remove();
+                draggedItem = null;
+            } else if (e.target.classList.contains('sort-category') && draggedItem) {
+                const dropCategory = e.target;
+                dropCategory.classList.remove('hover'); // Remove hover effect
+
+                // Append the dragged word to the category
+                const droppedWordElement = draggedItem;
+                droppedWordElement.classList.remove('words-list-item'); // Remove initial style
+                droppedWordElement.classList.add('sort-word'); // Add sorted word style
+                dropCategory.appendChild(droppedWordElement);
+
+                draggedItem = null;
+            }
+        });
+
+        // Vocabulary Matching Check (simplified)
+        function checkVocabularyMatch() {
+            const correctAnswers = {
+                "drop1": "arrivals",
+                "drop2": "bag drop",
+                "drop3": "security check",
+                "drop4": "check-in",
+                "drop5": "baggage reclaim",
+                "drop6": "departures",
+                "drop7": "gates",
+                "drop8": "lifts",
+                "drop9": "passport control",
+                "drop10": "trolley",
+                "drop11": "customs",
+                "drop12": "terminal"
+            };
+
+            for (let i = 1; i <= 12; i++) {
+                const dropTarget = document.getElementById(`drop${i}`);
+                const droppedSpan = dropTarget.querySelector('.matched-item');
+
+                if (droppedSpan) {
+                    const droppedWord = droppedSpan.textContent.toLowerCase();
+                    if (droppedWord === correctAnswers[`drop${i}`]) {
+                        dropTarget.classList.add('correct');
+                        dropTarget.classList.remove('incorrect');
+                    } else {
+                        dropTarget.classList.add('incorrect');
+                        dropTarget.classList.remove('correct');
+                    }
+                } else {
+                    dropTarget.classList.remove('correct', 'incorrect'); // Clear previous feedback if empty
+                }
+            }
+        }
+
+        // Pronunciation Sort Check
+        function checkPronunciationSort() {
+            const hardGWords = ["gate", "foggy", "forget", "guide", "guest", "begin", "gift", "guarantee", "organize", "girl"];
+            const softGWords = ["large", "village", "engineer", "agent", "region", "emergency", "general", "jazz"];
+
+            const hardGCategory = document.getElementById('hardG');
+            const softGCategory = document.getElementById('softG');
+
+            Array.from(hardGCategory.children).forEach(wordElement => {
+                if (wordElement.classList.contains('sort-word')) {
+                    const word = wordElement.textContent.toLowerCase();
+                    if (hardGWords.includes(word)) {
+                        wordElement.classList.add('correct');
+                        wordElement.classList.remove('incorrect');
+                    } else {
+                        wordElement.classList.add('incorrect');
+                        wordElement.classList.remove('correct');
+                    }
+                }
+            });
+
+            Array.from(softGCategory.children).forEach(wordElement => {
+                if (wordElement.classList.contains('sort-word')) {
+                    const word = wordElement.textContent.toLowerCase();
+                    if (softGWords.includes(word)) {
+                        wordElement.classList.add('correct');
+                        wordElement.classList.remove('incorrect');
+                    } else {
+                        wordElement.classList.add('incorrect');
+                        wordElement.classList.remove('correct');
+                    }
+                }
+            });
+        }
+
+    </script>
+
+</body>
+</html>
