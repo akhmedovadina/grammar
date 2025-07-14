@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Be Affirmative - Interactive Tasks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .task {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .task:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .task h2 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-icon {
+            font-size: 1.2em;
+        }
+
+        .word-bank {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .word-bank h3 {
+            color: #856404;
+            margin-bottom: 15px;
+        }
+
+        .word-option {
+            background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+            color: white;
+            padding: 10px 20px;
+            margin: 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            display: inline-block;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .word-option:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .word-option.selected {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            transform: scale(0.95);
+        }
+
+        .sentence-container {
+            background: #e3f2fd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+            border-left: 4px solid #2196f3;
+            font-size: 1.2em;
+        }
+
+        .blank {
+            display: inline-block;
+            min-width: 60px;
+            height: 30px;
+            border-bottom: 2px solid #666;
+            margin: 0 5px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .blank:hover {
+            border-bottom-color: #2196f3;
+        }
+
+        .blank.filled {
+            border-bottom-color: #28a745;
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .blank.error {
+            border-bottom-color: #dc3545;
+            color: #dc3545;
+        }
+
+        .card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 15px;
+            margin: 15px 0;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 16px rgba(0,0,0,0.2);
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+        }
+
+        .card h3 {
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .card p {
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        .card.correct {
+            background: linear-gradient(135deg, #28a745, #20c997);
+        }
+
+        .card.incorrect {
+            background: linear-gradient(135deg, #dc3545, #fd7e14);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+
+        .check-btn {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .bounce {
+            animation: bounce 0.6s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>✨ To Be Affirmative Tasks</h1>
+        
+        <!-- Task 1: Fill in the blanks -->
+        <div class="task">
+            <h2><span class="task-icon">📝</span>Task 1: Fill in the blanks</h2>
+            <div class="score">Score: <span id="score1">0</span>/5</div>
+            
+            <div class="word-bank">
+                <h3>🎯 Word Bank</h3>
+                <div class="word-option" onclick="selectWord('am', this)">am</div>
+                <div class="word-option" onclick="selectWord('is', this)">is</div>
+                <div class="word-option" onclick="selectWord('are', this)">are</div>
+            </div>
+            
+            <div class="sentence-container">
+                <p><strong>1.</strong> I <span class="blank" data-correct="am" onclick="fillBlank(this)"></span> a student.</p>
+            </div>
+            
+            <div class="sentence-container">
+                <p><strong>2.</strong> She <span class="blank" data-correct="is" onclick="fillBlank(this)"></span> my teacher.</p>
+            </div>
+            
+            <div class="sentence-container">
+                <p><strong>3.</strong> We <span class="blank" data-correct="are" onclick="fillBlank(this)"></span> friends.</p>
+            </div>
+            
+            <div class="sentence-container">
+                <p><strong>4.</strong> The cat <span class="blank" data-correct="is" onclick="fillBlank(this)"></span> sleeping.</p>
+            </div>
+            
+            <div class="sentence-container">
+                <p><strong>5.</strong> They <span class="blank" data-correct="are" onclick="fillBlank(this)"></span> happy.</p>
+            </div>
+            
+            <button class="check-btn" onclick="checkAnswers1()">Check Answers</button>
+            <button class="reset-btn" onclick="resetTask1()">Reset Task</button>
+            <div class="feedback" id="feedback1" style="display: none;"></div>
+        </div>
+
+        <!-- Task 2: Match the sentences -->
+        <div class="task">
+            <h2><span class="task-icon">🎪</span>Task 2: Complete the sentences</h2>
+            <div class="score">Score: <span id="score2">0</span>/6</div>
+            <div style="margin-bottom: 20px; color: #666; font-style: italic;">Click on each card to reveal the correct form of "to be"</div>
+            
+            <div class="card" onclick="revealAnswer(this, 'I am happy today')" data-question="I ___ happy today">
+                <h3>Complete the sentence:</h3>
+                <p><strong>I ___ happy today</strong></p>
+            </div>
+            
+            <div class="card" onclick="revealAnswer(this, 'You are my best friend')" data-question="You ___ my best friend">
+                <h3>Complete the sentence:</h3>
+                <p><strong>You ___ my best friend</strong></p>
+            </div>
+            
+            <div class="card" onclick="revealAnswer(this, 'He is a doctor')" data-question="He ___ a doctor">
+                <h3>Complete the sentence:</h3>
+                <p><strong>He ___ a doctor</strong></p>
+            </div>
+            
+            <div class="card" onclick="revealAnswer(this, 'She is beautiful')" data-question="She ___ beautiful">
+                <h3>Complete the sentence:</h3>
+                <p><strong>She ___ beautiful</strong></p>
+            </div>
+            
+            <div class="card" onclick="revealAnswer(this, 'It is raining')" data-question="It ___ raining">
+                <h3>Complete the sentence:</h3>
+                <p><strong>It ___ raining</strong></p>
+            </div>
+            
+            <div class="card" onclick="revealAnswer(this, 'We are students')" data-question="We ___ students">
+                <h3>Complete the sentence:</h3>
+                <p><strong>We ___ students</strong></p>
+            </div>
+            
+            <button class="reset-btn" onclick="resetTask2()">Reset Task</button>
+            <div class="feedback" id="feedback2" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let score1 = 0;
+        let score2 = 0;
+        let selectedWord = '';
+        let checkedTask1 = false;
+        let revealedCards = 0;
+
+        function selectWord(word, element) {
+            // Remove previous selection
+            document.querySelectorAll('.word-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            // Select current word
+            element.classList.add('selected');
+            selectedWord = word;
+        }
+
+        function fillBlank(element) {
+            if (selectedWord && !checkedTask1) {
+                element.textContent = selectedWord;
+                element.classList.add('filled');
+                element.dataset.filled = selectedWord;
+            }
+        }
+
+        function checkAnswers1() {
+            if (checkedTask1) return;
+            
+            checkedTask1 = true;
+            score1 = 0;
+            
+            document.querySelectorAll('.blank').forEach(blank => {
+                if (blank.dataset.filled === blank.dataset.correct) {
+                    blank.classList.add('filled');
+                    blank.classList.remove('error');
+                    score1++;
+                } else {
+                    blank.classList.add('error');
+                    blank.classList.remove('filled');
+                    blank.classList.add('shake');
+                }
+            });
+
+            document.getElementById('score1').textContent = score1;
+            
+            if (score1 === 5) {
+                document.getElementById('feedback1').innerHTML = '🎉 Perfect! You got all answers correct!';
+                document.getElementById('feedback1').className = 'feedback correct';
+            } else {
+                document.getElementById('feedback1').innerHTML = `Good job! You got ${score1}/5 correct. Try again!`;
+                document.getElementById('feedback1').className = 'feedback incorrect';
+            }
+            document.getElementById('feedback1').style.display = 'block';
+        }
+
+        function resetTask1() {
+            score1 = 0;
+            checkedTask1 = false;
+            selectedWord = '';
+            document.getElementById('score1').textContent = score1;
+            
+            document.querySelectorAll('.blank').forEach(blank => {
+                blank.textContent = '';
+                blank.classList.remove('filled', 'error', 'shake');
+                blank.dataset.filled = '';
+            });
+            
+            document.querySelectorAll('.word-option').forEach(opt => {
+                opt.classList.remove('selected');
+            });
+            
+            document.getElementById('feedback1').style.display = 'none';
+        }
+
+        function revealAnswer(element, answer) {
+            if (element.classList.contains('correct') || element.classList.contains('incorrect')) {
+                return;
+            }
+            
+            element.innerHTML = `<h3>Completed sentence:</h3><p><strong>${answer}</strong></p>`;
+            element.classList.add('correct');
+            element.classList.add('bounce');
+            
+            score2++;
+            revealedCards++;
+            document.getElementById('score2').textContent = score2;
+            
+            if (revealedCards === 6) {
+                setTimeout(() => {
+                    document.getElementById('feedback2').innerHTML = '🎉 Excellent! You completed all sentences!';
+                    document.getElementById('feedback2').className = 'feedback correct';
+                    document.getElementById('feedback2').style.display = 'block';
+                }, 500);
+            }
+        }
+
+        function resetTask2() {
+            score2 = 0;
+            revealedCards = 0;
+            document.getElementById('score2').textContent = score2;
+            
+            document.querySelectorAll('.card').forEach(card => {
+                card.classList.remove('correct', 'incorrect', 'bounce');
+                const question = card.dataset.question;
+                card.innerHTML = `<h3>Complete the sentence:</h3><p><strong>${question}</strong></p>`;
+            });
+            
+            document.getElementById('feedback2').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
