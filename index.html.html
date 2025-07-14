@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Be Negative - Interactive Tasks</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            font-size: 2.5em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .task {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 30px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .task:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+
+        .task h2 {
+            color: #495057;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .task-icon {
+            font-size: 1.2em;
+        }
+
+        .sentence-builder {
+            background: #fff3cd;
+            border: 2px solid #ffeaa7;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+
+        .sentence-parts {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .sentence-part {
+            background: linear-gradient(45deg, #74b9ff, #0984e3);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .sentence-part:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .sentence-part.selected {
+            background: linear-gradient(45deg, #00b894, #00cec9);
+            transform: scale(0.95);
+        }
+
+        .sentence-part.disabled {
+            background: #6c757d;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+
+        .sentence-display {
+            background: #e3f2fd;
+            border: 2px solid #2196f3;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            min-height: 80px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .sentence-word {
+            background: #2196f3;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin: 2px;
+        }
+
+        .transformation-container {
+            display: grid;
+            grid-template-columns: 1fr auto 1fr;
+            gap: 20px;
+            align-items: center;
+            margin: 20px 0;
+        }
+
+        .sentence-box {
+            background: #f8f9fa;
+            border: 2px solid #dee2e6;
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .sentence-box.positive {
+            border-color: #28a745;
+            background: #d4edda;
+        }
+
+        .sentence-box.negative {
+            border-color: #dc3545;
+            background: #f8d7da;
+        }
+
+        .transform-btn {
+            background: linear-gradient(45deg, #fd79a8, #fdcb6e);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            width: 60px;
+            height: 60px;
+        }
+
+        .transform-btn:hover {
+            transform: scale(1.1);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .feedback {
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: bold;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feedback.correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .feedback.incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .reset-btn {
+            background: linear-gradient(45deg, #6c757d, #495057);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 20px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .reset-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .score {
+            text-align: center;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: #495057;
+            margin-bottom: 20px;
+        }
+
+        .check-btn {
+            background: linear-gradient(45deg, #4facfe, #00f2fe);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1.1em;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            margin-top: 20px;
+        }
+
+        .check-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.3);
+        }
+
+        .hint {
+            background: #d1ecf1;
+            border: 1px solid #bee5eb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #0c5460;
+        }
+
+        .clear-btn {
+            background: linear-gradient(45deg, #e17055, #d63031);
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.9em;
+            transition: all 0.3s ease;
+            margin-left: 10px;
+        }
+
+        .clear-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        @keyframes bounce {
+            0%, 20%, 50%, 80%, 100% {
+                transform: translateY(0);
+            }
+            40% {
+                transform: translateY(-10px);
+            }
+            60% {
+                transform: translateY(-5px);
+            }
+        }
+
+        .bounce {
+            animation: bounce 0.6s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .shake {
+            animation: shake 0.5s;
+        }
+
+        @keyframes rotate {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .rotate {
+            animation: rotate 0.6s;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ To Be Negative Tasks</h1>
+        
+        <!-- Task 1: Sentence Builder -->
+        <div class="task">
+            <h2><span class="task-icon">🏗️</span>Task 1: Build Negative Sentences</h2>
+            <div class="score">Score: <span id="score1">0</span>/4</div>
+            
+            <div class="hint">
+                <strong>💡 Hint:</strong> To make "to be" negative, add "not" after the verb: am not, is not, are not
+            </div>
+            
+            <div class="sentence-builder">
+                <h3>Build the sentence: "I am not happy"</h3>
+                <div class="sentence-parts">
+                    <div class="sentence-part" onclick="addToSentence('I')">I</div>
+                    <div class="sentence-part" onclick="addToSentence('am')">am</div>
+                    <div class="sentence-part" onclick="addToSentence('not')">not</div>
+                    <div class="sentence-part" onclick="addToSentence('happy')">happy</div>
+                    <div class="sentence-part" onclick="addToSentence('is')">is</div>
+                    <div class="sentence-part" onclick="addToSentence('are')">are</div>
+                </div>
+                <div class="sentence-display" id="sentenceDisplay1">
+                    <span style="color: #666;">Click words to build the sentence...</span>
+                </div>
+                <button class="check-btn" onclick="checkSentence1()">Check Sentence</button>
+                <button class="clear-btn" onclick="clearSentence1()">Clear</button>
+            </div>
+            
+            <div class="sentence-builder">
+                <h3>Build the sentence: "She is not a teacher"</h3>
+                <div class="sentence-parts">
+                    <div class="sentence-part" onclick="addToSentence2('She')">She</div>
+                    <div class="sentence-part" onclick="addToSentence2('is')">is</div>
+                    <div class="sentence-part" onclick="addToSentence2('not')">not</div>
+                    <div class="sentence-part" onclick="addToSentence2('a')">a</div>
+                    <div class="sentence-part" onclick="addToSentence2('teacher')">teacher</div>
+                    <div class="sentence-part" onclick="addToSentence2('am')">am</div>
+                    <div class="sentence-part" onclick="addToSentence2('are')">are</div>
+                </div>
+                <div class="sentence-display" id="sentenceDisplay2">
+                    <span style="color: #666;">Click words to build the sentence...</span>
+                </div>
+                <button class="check-btn" onclick="checkSentence2()">Check Sentence</button>
+                <button class="clear-btn" onclick="clearSentence2()">Clear</button>
+            </div>
+            
+            <button class="reset-btn" onclick="resetTask1()">Reset Task</button>
+            <div class="feedback" id="feedback1" style="display: none;"></div>
+        </div>
+
+        <!-- Task 2: Positive to Negative Transformation -->
+        <div class="task">
+            <h2><span class="task-icon">🔄</span>Task 2: Transform to Negative</h2>
+            <div class="score">Score: <span id="score2">0</span>/5</div>
+            
+            <div class="hint">
+                <strong>💡 Hint:</strong> Click the arrow to transform positive sentences to negative!
+            </div>
+            
+            <div class="transformation-container">
+                <div class="sentence-box positive" id="positive1">
+                    <strong>I am tired</strong>
+                </div>
+                <button class="transform-btn" onclick="transform(1)">→</button>
+                <div class="sentence-box" id="negative1">
+                    <span style="color: #666;">Click → to transform</span>
+                </div>
+            </div>
+            
+            <div class="transformation-container">
+                <div class="sentence-box positive" id="positive2">
+                    <strong>You are late</strong>
+                </div>
+                <button class="transform-btn" onclick="transform(2)">→</button>
+                <div class="sentence-box" id="negative2">
+                    <span style="color: #666;">Click → to transform</span>
+                </div>
+            </div>
+            
+            <div class="transformation-container">
+                <div class="sentence-box positive" id="positive3">
+                    <strong>He is tall</strong>
+                </div>
+                <button class="transform-btn" onclick="transform(3)">→</button>
+                <div class="sentence-box" id="negative3">
+                    <span style="color: #666;">Click → to transform</span>
+                </div>
+            </div>
+            
+            <div class="transformation-container">
+                <div class="sentence-box positive" id="positive4">
+                    <strong>She is busy</strong>
+                </div>
+                <button class="transform-btn" onclick="transform(4)">→</button>
+                <div class="sentence-box" id="negative4">
+                    <span style="color: #666;">Click → to transform</span>
+                </div>
+            </div>
+            
+            <div class="transformation-container">
+                <div class="sentence-box positive" id="positive5">
+                    <strong>We are ready</strong>
+                </div>
+                <button class="transform-btn" onclick="transform(5)">→</button>
+                <div class="sentence-box" id="negative5">
+                    <span style="color: #666;">Click → to transform</span>
+                </div>
+            </div>
+            
+            <button class="reset-btn" onclick="resetTask2()">Reset Task</button>
+            <div class="feedback" id="feedback2" style="display: none;"></div>
+        </div>
+    </div>
+
+    <script>
+        let score1 = 0;
+        let score2 = 0;
+        let currentSentence1 = [];
+        let currentSentence2 = [];
+        let transformed = [];
+        let sentence1Completed = false;
+        let sentence2Completed = false;
+
+        const correctSentence1 = ['I', 'am', 'not', 'happy'];
+        const correctSentence2 = ['She', 'is', 'not', 'a', 'teacher'];
+        
+        const transformations = {
+            1: { positive: "I am tired", negative: "I am not tired" },
+            2: { positive: "You are late", negative: "You are not late" },
+            3: { positive: "He is tall", negative: "He is not tall" },
+            4: { positive: "She is busy", negative: "She is not busy" },
+            5: { positive: "We are ready", negative: "We are not ready" }
+        };
+
+        function addToSentence(word) {
+            if (sentence1Completed) return;
+            
+            currentSentence1.push(word);
+            updateSentenceDisplay1();
+        }
+
+        function addToSentence2(word) {
+            if (sentence2Completed) return;
+            
+            currentSentence2.push(word);
+            updateSentenceDisplay2();
+        }
+
+        function updateSentenceDisplay1() {
+            const display = document.getElementById('sentenceDisplay1');
+            if (currentSentence1.length === 0) {
+                display.innerHTML = '<span style="color: #666;">Click words to build the sentence...</span>';
+            } else {
+                display.innerHTML = currentSentence1.map(word => 
+                    `<span class="sentence-word">${word}</span>`
+                ).join('');
+            }
+        }
+
+        function updateSentenceDisplay2() {
+            const display = document.getElementById('sentenceDisplay2');
+            if (currentSentence2.length === 0) {
+                display.innerHTML = '<span style="color: #666;">Click words to build the sentence...</span>';
+            } else {
+                display.innerHTML = currentSentence2.map(word => 
+                    `<span class="sentence-word">${word}</span>`
+                ).join('');
+            }
+        }
+
+        function checkSentence1() {
+            if (sentence1Completed) return;
+            
+            const isCorrect = JSON.stringify(currentSentence1) === JSON.stringify(correctSentence1);
+            const display = document.getElementById('sentenceDisplay1');
+            
+            if (isCorrect) {
+                display.classList.add('bounce');
+                display.style.borderColor = '#28a745';
+                display.style.background = '#d4edda';
+                sentence1Completed = true;
+                score1++;
+                updateScore1();
+            } else {
+                display.classList.add('shake');
+                display.style.borderColor = '#dc3545';
+                display.style.background = '#f8d7da';
+                setTimeout(() => {
+                    display.classList.remove('shake');
+                    display.style.borderColor = '#2196f3';
+                    display.style.background = '#e3f2fd';
+                }, 1000);
+            }
+        }
+
+        function checkSentence2() {
+            if (sentence2Completed) return;
+            
+            const isCorrect = JSON.stringify(currentSentence2) === JSON.stringify(correctSentence2);
+            const display = document.getElementById('sentenceDisplay2');
+            
+            if (isCorrect) {
+                display.classList.add('bounce');
+                display.style.borderColor = '#28a745';
+                display.style.background = '#d4edda';
+                sentence2Completed = true;
+                score1++;
+                updateScore1();
+            } else {
+                display.classList.add('shake');
+                display.style.borderColor = '#dc3545';
+                display.style.background = '#f8d7da';
+                setTimeout(() => {
+                    display.classList.remove('shake');
+                    display.style.borderColor = '#2196f3';
+                    display.style.background = '#e3f2fd';
+                }, 1000);
+            }
+        }
+
+        function updateScore1() {
+            document.getElementById('score1').textContent = score1;
+            
+            if (score1 === 2) {
+                setTimeout(() => {
+                    document.getElementById('feedback1').innerHTML = '🎉 Excellent! You built both negative sentences correctly!';
+                    document.getElementById('feedback1').className = 'feedback correct';
+                    document.getElementById('feedback1').style.display = 'block';
+                }, 500);
+            }
+        }
+
+        function clearSentence1() {
+            if (sentence1Completed) return;
+            currentSentence1 = [];
+            updateSentenceDisplay1();
+        }
+
+        function clearSentence2() {
+            if (sentence2Completed) return;
+            currentSentence2 = [];
+            updateSentenceDisplay2();
+        }
+
+        function transform(index) {
+            if (transformed.includes(index)) return;
+            
+            const button = event.target;
+            const negativeBox = document.getElementById(`negative${index}`);
+            
+            button.classList.add('rotate');
+            
+            setTimeout(() => {
+                negativeBox.innerHTML = `<strong>${transformations[index].negative}</strong>`;
+                negativeBox.classList.add('negative', 'bounce');
+                transformed.push(index);
+                score2++;
+                document.getElementById('score2').textContent = score2;
+                
+                if (score2 === 5) {
+                    setTimeout(() => {
+                        document.getElementById('feedback2').innerHTML = '🎉 Perfect! You transformed all sentences to negative!';
+                        document.getElementById('feedback2').className = 'feedback correct';
+                        document.getElementById('feedback2').style.display = 'block';
+                    }, 500);
+                }
+            }, 300);
+        }
+
+        function resetTask1() {
+            score1 = 0;
+            currentSentence1 = [];
+            currentSentence2 = [];
+            sentence1Completed = false;
+            sentence2Completed = false;
+            
+            document.getElementById('score1').textContent = score1;
+            document.getElementById('feedback1').style.display = 'none';
+            
+            const displays = ['sentenceDisplay1', 'sentenceDisplay2'];
+            displays.forEach(id => {
+                const display = document.getElementById(id);
+                display.innerHTML = '<span style="color: #666;">Click words to build the sentence...</span>';
+                display.style.borderColor = '#2196f3';
+                display.style.background = '#e3f2fd';
+                display.classList.remove('bounce', 'shake');
+            });
+        }
+
+        function resetTask2() {
+            score2 = 0;
+            transformed = [];
+            document.getElementById('score2').textContent = score2;
+            document.getElementById('feedback2').style.display = 'none';
+            
+            for (let i = 1; i <= 5; i++) {
+                const negativeBox = document.getElementById(`negative${i}`);
+                negativeBox.innerHTML = '<span style="color: #666;">Click → to transform</span>';
+                negativeBox.classList.remove('negative', 'bounce');
+            }
+        }
+    </script>
+</body>
+</html>
